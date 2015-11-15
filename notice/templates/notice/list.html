@@ -1,0 +1,17 @@
+{% extends 'notice/base.html' %}
+
+{% block title %}I have overwritten into list.html of notices{% endblock %}
+
+{% block content %}
+<h1 class="page-header">Please pick a class from the list</h1>
+<div class="list-group" id="myList">
+  <a href="{% url 'notice:class' 'cNurseryA' %}" class="list-group-item">Nursery 'A'</a>
+  <a href="{% url 'notice:class' 'c1A' %}" class="list-group-item">Class 1 'A'</a>
+  <a href="{% url 'notice:class' 'c1B' %}" class="list-group-item">Class 1 'B'</a>
+  <a href="{% url 'notice:class' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
+  <a href="{% url 'notice:class' 'c1D' %}" class="list-group-item">Class 1 'D'</a>
+</div>
+{% endblock %}
+
+
+

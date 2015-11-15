@@ -1,0 +1,126 @@
+{% extends 'attendance/base.html' %}
+{% block title %}I need to think of a better name than index.html{% endblock %}
+
+{% block content %}
+<h1 class="page-header">{{neatSection}}</h1>
+<div>
+	<br>
+	<button type="button" class="download btn btn-primary btn-block">Download Excel Sheet</button>
+</div>
+<hr>
+<div class="table-responsive">
+	<table class="table table-striped" id ="myTable">
+	</table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+	var data = '';
+	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+	var GameScore = Parse.Object.extend("{{classSection}}");
+	var query = new Parse.Query(GameScore);
+	query.notEqualTo("objectId", "E57WOexIN8");
+	query.ascending("cDate");
+	var studentListObject = Parse.Object.extend("Class");
+	var queryStudent = new Parse.Query(studentListObject);
+	queryStudent.equalTo("Class_Name","{{classSection}}");
+	var trial;
+	queryStudent.find({
+		success: function(results) {
+			trial = results[0].get('Student_Name');
+			return trial;
+		},
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+	}).then(function(results) {
+		query.find({
+			success: function(results) {
+
+// This is the code to build a csv object to download Excel-like data
+
+// this is the code for filling up the table
+var out = "<thead><tr><th>" + "cDate" + "</th><th>"
+data = 'cDate';
+
+for(var k = 0; k < trial.length; k++){
+	out+= trial[k] + "</th><th>";
+	data += "," + trial[k]; 
+}
+data += '\r\n';
+out+="</th></tr></thead><tbody>";     
+for (var i = 0; i < results.length; i++) {
+	var object = results[i];
+	out+="<tr><td>" + 
+	object.get('cDate') +"</td><td>";
+	line = '';
+	line += '"' + object.get('cDate') + '"';
+	for(var j = 0; j < trial.length; j++){
+		var column = trial[j].replace(/ /g, "_");
+		column = "R" + column;
+		out+= object.get(column) +"</td><td>";
+		line += ",";
+		line += '"' + object.get(column)+ '"';
+	}
+	out += "</td></tr>";
+	data += line + '\r\n';
+
+}
+out+="</tbody>";
+document.getElementById("myTable").innerHTML = out;
+
+}})
+}); // close then function
+
+
+// Code for downloading CSV starts here
+$(document).ready(function () {
+	$('.download').click(function(){
+		if(data == '')
+			return;
+		CSVDownloader(data, true);
+	});
+
+});
+function CSVDownloader(CSV,ShowLabel) {    
+
+	if (CSV == '') {        
+		growl.error("Invalid data");
+		return;
+	}
+
+//var fileName = Date.today().toString('MMMM_dd');
+var fileName = "output"
+if(msieversion()){
+	var IEwindow = window.open();
+	IEwindow.document.write('sep=,\r\n' + CSV);
+	IEwindow.document.close();
+	IEwindow.document.execCommand('SaveAs', true, fileName + ".csv");
+	IEwindow.close();
+} else {
+	var uri = 'data:application/csv;charset=utf-8,' + escape(CSV);
+	var link = document.createElement("a");    
+	link.href = uri;
+	link.style = "visibility:hidden";
+	link.download = fileName + ".csv";
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
+}
+function msieversion() {
+	var ua = window.navigator.userAgent; 
+	var msie = ua.indexOf("MSIE "); 
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number 
+{
+	return true;
+} else { // If another browser, 
+	return false;
+}
+return false; 
+}
+
+</script>
+
+{% endblock %}

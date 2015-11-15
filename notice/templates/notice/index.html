@@ -1,0 +1,118 @@
+{% extends 'notice/base.html' %}
+{% block title %}I need to think of a better name than index.html for notices{% endblock %}
+
+{% block content %}
+          <h1 class="page-header">{{neatSection}}</h1>
+          <div>
+        <br>
+        <button type="button" class="download btn btn-primary btn-block">Download Excel Sheet</button>
+        </div>
+        <hr>
+          <div class="table-responsive">
+            <table class="table table-striped" id ="myTable">
+              </table>
+          </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+    	var data = '';
+    	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+    	var GameScore = Parse.Object.extend("{{classSection}}");
+		var query = new Parse.Query(GameScore);
+		query.notEqualTo("objectId", "E57WOexIN8");
+		query.ascending("cDate");
+		query.find({
+		  success: function(results) {
+		    alert("Successfully retrieved " + results.length + " scores.");
+		    // This is the code to build a csv object to download Excel-like data
+		  //   data = 'cDate, Ram, Shyam' + '\r\n'
+
+
+
+		  //   // this is the code for filling up the table
+		  //   var out = "<thead><tr><th>" + "cDate" + "</th><th>" + 
+    // "Ram" + "</th><th>" + 
+    // "Shyam" +
+    // "</th></tr></thead><tbody>";     
+		  //   for (var i = 0; i < results.length; i++) {
+		  //     var object = results[i];
+		  //     out+="<tr><td>" + 
+    //     object.get('cDate') +"</td><td>" +
+    //     object.get('Ram') +"</td><td>" +
+    //     object.get('Shyam') +"</td><td>" + "</td></tr>";
+    //     //var tempDate = new Date(object.get('cDate'));
+    //     line = ''
+    //      line += '"' + object.get('cDate') + '"';
+    //     line += ",";
+    //     line += '"' + object.get('Ram') + '"';
+    //   line += ",";
+    //   line += '"' + object.get('Shyam') + '"' ;
+    //   data += line + '\r\n';
+		  //     //alert(object.id + ' - ' + object.get('Ram'));
+		  //   }
+		  //   out+="</tbody>";
+		  //   document.getElementById("myTable").innerHTML = out;
+
+		  },
+		  error: function(error) {
+		    alert("Error: " + error.code + " " + error.message);
+		  }
+		});
+  //   	var TestObject = Parse.Object.extend("TestObject");
+		// var testObject = new TestObject();
+		// testObject.save({foo: "bar"}).then(function(object) {
+		//   alert("yay! it worked");
+		// });
+
+
+        // Code for downloading CSV starts here
+        $(document).ready(function () {
+            $('.download').click(function(){
+                if(data == '')
+                    return;
+            CSVDownloader(data, true);
+             });
+
+        });
+        function CSVDownloader(CSV,ShowLabel) {    
+    
+    if (CSV == '') {        
+         growl.error("Invalid data");
+         return;
+    }
+   
+    //var fileName = Date.today().toString('MMMM_dd');
+    var fileName = "output"
+    if(msieversion()){
+    var IEwindow = window.open();
+    IEwindow.document.write('sep=,\r\n' + CSV);
+    IEwindow.document.close();
+    IEwindow.document.execCommand('SaveAs', true, fileName + ".csv");
+    IEwindow.close();
+    } else {
+     var uri = 'data:application/csv;charset=utf-8,' + escape(CSV);
+     var link = document.createElement("a");    
+     link.href = uri;
+     link.style = "visibility:hidden";
+     link.download = fileName + ".csv";
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+    }
+}
+function msieversion() {
+    var ua = window.navigator.userAgent; 
+    var msie = ua.indexOf("MSIE "); 
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number 
+    {
+        return true;
+    } else { // If another browser, 
+        return false;
+    }
+        return false; 
+}
+
+    </script>
+
+{% endblock %}

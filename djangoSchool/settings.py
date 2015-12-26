@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'attendance',
     'notice',
+    'marks',
 )
 
 MIDDLEWARE_CLASSES = (

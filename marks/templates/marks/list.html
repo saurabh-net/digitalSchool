@@ -1,0 +1,17 @@
+{% extends 'marks/base.html' %}
+
+{% block title %}I have overwritten into list.html{% endblock %}
+
+{% block content %}
+<h1 class="page-header">Please pick a class from the list</h1>
+<div class="list-group" id="myList">
+  <a href="{% url 'marks:enterMarks' 'cNurseryA' %}" class="list-group-item">Nursery 'A'</a>
+  <a href="{% url 'marks:enterMarks' 'c1A' %}" class="list-group-item">Class 1 'A'</a>
+  <a href="{% url 'marks:enterMarks' 'c1B' %}" class="list-group-item">Class 1 'B'</a>
+  <a href="{% url 'marks:enterMarks' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
+  <a href="{% url 'marks:enterMarks' 'c1D' %}" class="list-group-item">Class 1 'D'</a>
+</div>
+{% endblock %}
+
+
+

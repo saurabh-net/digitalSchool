@@ -1,6 +1,6 @@
 {% extends 'attendance/base.html' %}
 {% block title %}I need to think of a better name than index.html{% endblock %}
-
+`
 {% block content %}
 <h1 class="page-header">{{neatSection}}</h1>
 <div>
@@ -21,7 +21,7 @@
 	var GameScore = Parse.Object.extend("{{classSection}}");
 	var query = new Parse.Query(GameScore);
 	query.notEqualTo("objectId", "E57WOexIN8");
-	query.ascending("cDate");
+	query.ascending("createdAt");
 	var studentListObject = Parse.Object.extend("Class");
 	var queryStudent = new Parse.Query(studentListObject);
 	queryStudent.equalTo("Class_Name","{{classSection}}");

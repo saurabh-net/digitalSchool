@@ -1,0 +1,64 @@
+{% extends 'marks/base.html' %}
+{% block title %}I need to think of a better name than markAttendance.html{% endblock %}
+
+{% block content %}
+<h1 class="page-header">{{neatSection}}</h1>
+
+<div>
+	<br>
+
+<a href="{% url 'marks:viewmarks' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a>
+
+</div>
+<hr>
+
+<form action="{% url 'marks:viewMarks' 'cNurseryA' %}" method="post">
+{% csrf_token %} 
+What date is this attendance for? <input type="text" name="date" id="date">
+<ul class="list-group list-unstyled">
+
+{% for o in studentList %}
+<li>
+<label><input type="checkbox" name="{{o}}" data-toggle="toggle" data-on="Absent" data-off="Present" data-onstyle="danger" data-offstyle="success"> {{o}} </label>
+</li>
+{% endfor %}
+
+</ul>
+<input type="submit" value="OK">
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$( "#date" ).datepicker(
+	{dateFormat: "d/m/yy"});
+// 	var data = '';
+// 	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+// 	var GameScore = Parse.Object.extend("{{classSection}}");
+// 	var query = new Parse.Query(GameScore);
+// 	query.notEqualTo("objectId", "E57WOexIN8");
+// 	query.ascending("cDate");
+// 	var studentListObject = Parse.Object.extend("Class");
+// 	var queryStudent = new Parse.Query(studentListObject);
+// 	queryStudent.equalTo("Class_Name","{{classSection}}");
+// 	var trial;
+// 	queryStudent.find({
+// 		success: function(results) {
+// 			trial = results[0].get('Student_Name');
+// 			return trial;
+// 		},
+// 		error: function(error) {
+// 			alert("Error: " + error.code + " " + error.message);
+// 		}
+// 	}).then(function(results) {
+// 		query.find({
+// 			success: function(results) {
+
+// // This is the code to build a csv object to download Excel-like data
+
+
+
+</script>
+
+{% endblock %}

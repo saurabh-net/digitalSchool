@@ -7,25 +7,65 @@
 <div>
 	<br>
 
-<a href="{% url 'marks:viewmarks' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a>
+<a href="{% url 'marks:viewMarks' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Marks for this class</a>
 
 </div>
 <hr>
 
-<form action="{% url 'marks:viewMarks' 'cNurseryA' %}" method="post">
+<form action="{% url 'marks:enterMarks' 'cNurseryA' %}" method="POST" >
 {% csrf_token %} 
-What date is this attendance for? <input type="text" name="date" id="date">
-<ul class="list-group list-unstyled">
+
+<div class="form-group">
+  <label for="date">What date are these marks for? </label>
+  <input type="text" class="form-control" id="date" name="date">
+</div>
+<div class="form-group">
+      <label for="subject">What subject are these marks for?</label>
+      <select class="form-control" id="subject" name="subject">
+        <option>Hindi</option>
+        <option>English</option>
+        <option>Math</option>
+        <option>Science</option>
+      </select>
+</div>
+      <div class="form-group">
+      <label for="category">What category do these marks belong to?</label>
+      <select class="form-control" id="category" name="category">
+        <option>Final</option>
+        <option>Half-yearly</option>
+        <option>Weekly</option>
+        <option>Assignment</option>
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="total">What is the total marks for the paper? [Numbers only, example, 100]</label>
+  <input type="text" class="form-control" id="total" name="total">
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Student's Name</th>
+        <th>Student's Marks</th>
+      </tr>
+    </thead>
+    <tbody>
 
 {% for o in studentList %}
-<li>
-<label><input type="checkbox" name="{{o}}" data-toggle="toggle" data-on="Absent" data-off="Present" data-onstyle="danger" data-offstyle="success"> {{o}} </label>
-</li>
+<tr>
+        <td><label for="total">{{o}}</label></td>
+        <td><div class="form-group">
+  			<input type="text" class="form-control" name="{{o}}">
+		</div></td>
+    </tr>
 {% endfor %}
+</tbody>
+  </table>
+<input type="submit" value="Submit Marks" class="btn btn-primary btn-block" role="button">
 
-</ul>
-<input type="submit" value="OK">
 </form>
+<hr>
 
 {% endblock %}
 
@@ -33,31 +73,6 @@ What date is this attendance for? <input type="text" name="date" id="date">
 <script>
 $( "#date" ).datepicker(
 	{dateFormat: "d/m/yy"});
-// 	var data = '';
-// 	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
-// 	var GameScore = Parse.Object.extend("{{classSection}}");
-// 	var query = new Parse.Query(GameScore);
-// 	query.notEqualTo("objectId", "E57WOexIN8");
-// 	query.ascending("cDate");
-// 	var studentListObject = Parse.Object.extend("Class");
-// 	var queryStudent = new Parse.Query(studentListObject);
-// 	queryStudent.equalTo("Class_Name","{{classSection}}");
-// 	var trial;
-// 	queryStudent.find({
-// 		success: function(results) {
-// 			trial = results[0].get('Student_Name');
-// 			return trial;
-// 		},
-// 		error: function(error) {
-// 			alert("Error: " + error.code + " " + error.message);
-// 		}
-// 	}).then(function(results) {
-// 		query.find({
-// 			success: function(results) {
-
-// // This is the code to build a csv object to download Excel-like data
-
-
 
 </script>
 

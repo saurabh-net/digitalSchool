@@ -1,4 +1,4 @@
-{% extends 'attendance/base.html' %}
+{% extends 'marks/base.html' %}
 {% block title %}I need to think of a better name than index.html{% endblock %}
 `
 {% block content %}
@@ -18,7 +18,8 @@
 <script>
 	var data = '';
 	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
-	var GameScore = Parse.Object.extend("{{classSection}}");
+	var tableToLoad = "Marks" + "{{classSection}}"
+	var GameScore = Parse.Object.extend(tableToLoad);
 	var query = new Parse.Query(GameScore);
 	query.notEqualTo("objectId", "E57WOexIN8");
 	query.ascending("createdAt");
@@ -28,6 +29,7 @@
 	var trial;
 	queryStudent.find({
 		success: function(results) {
+			// trial stores the list of student names
 			trial = results[0].get('Student_Name');
 			return trial;
 		},
@@ -38,24 +40,32 @@
 		query.find({
 			success: function(results) {
 
-// This is the code to build a csv object to download Excel-like data
-
-// this is the code for filling up the table
-var out = "<thead><tr><th>" + "cDate" + "</th><th>"
-data = 'cDate';
+// This is the code to build a csv object to download Excel-like data\
+// This is also the code for filling up the table
+// results refers to the entire table of data
+// trial refers to individual students
+var out = "<thead><tr><th>" + "cDate" + "</th><th>Subject</th><th>Category</th><th>Max Marks</th><th>"
+data = 'cDate, Subject, Category, Max Marks';
 
 for(var k = 0; k < trial.length; k++){
 	out+= trial[k] + "</th><th>";
 	data += "," + trial[k]; 
 }
 data += '\r\n';
+// just finished filling up the header
 out+="</th></tr></thead><tbody>";     
 for (var i = 0; i < results.length; i++) {
 	var object = results[i];
 	out+="<tr><td>" + 
-	object.get('cDate') +"</td><td>";
+	object.get('cDate') +"</td><td>" +
+	object.get('Subject') +"</td><td>" +
+	object.get('Category') +"</td><td>" +
+	object.get('MaxMarks') +"</td><td>"
 	line = '';
-	line += '"' + object.get('cDate') + '"';
+	line += '"' + object.get('cDate') + '",';
+	line += '"' + object.get('Subject') + '",';
+	line += '"' + object.get('Category') + '",';
+	line += '"' + object.get('MaxMarks') + '"';
 	for(var j = 0; j < trial.length; j++){
 		var column = trial[j].replace(/ /g, "_");
 		column = "R" + column;
@@ -69,7 +79,8 @@ for (var i = 0; i < results.length; i++) {
 }
 out+="</tbody>";
 document.getElementById("myTable").innerHTML = out;
-
+var offset = $('.navbar').height();
+$("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 }})
 }); // close then function
 

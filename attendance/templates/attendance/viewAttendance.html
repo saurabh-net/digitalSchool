@@ -69,7 +69,8 @@ for (var i = 0; i < results.length; i++) {
 }
 out+="</tbody>";
 document.getElementById("myTable").innerHTML = out;
-
+var offset = $('.navbar').height();
+$("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 }})
 }); // close then function
 

@@ -16,7 +16,7 @@ def viewAttendance(request,classSection):
 	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection}
 	return render(request,'attendance/viewAttendance.html',context)
 
-def markAttendance(request,classSection):
+def enterAttendance(request,classSection):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	params = urllib.urlencode({"where":json.dumps({
 	       "Class_Name": '%s' % classSection
@@ -45,11 +45,16 @@ def markAttendance(request,classSection):
 
 		connection = httplib.HTTPSConnection('api.parse.com', 443)
 		connection.connect()
-		connection.request('POST', '/1/classes/cNurseryA', json_data, {
+		connection.request('POST', '/1/classes/' + classSection , json_data, {
 		       "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
 		       "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
 		       "Content-Type": "application/json"
 		     })
+				# connection.request('POST', '/1/classes/cNurseryA', json_data, {
+		  #      "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		  #      "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
+		  #      "Content-Type": "application/json"
+		  #    })
 		results = json.loads(connection.getresponse().read())
 		print results
 					
@@ -59,5 +64,5 @@ def markAttendance(request,classSection):
 		strippedSection = classSection[1:]
 
 		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList}
-		return render(request,'attendance/markAttendance.html',context)
+		return render(request,'attendance/enterAttendance.html',context)
 

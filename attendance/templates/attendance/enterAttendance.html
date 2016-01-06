@@ -7,12 +7,14 @@
 <div>
 	<br>
 
-<a href="{% url 'attendance:viewAttendance' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a>
+<a href="{% url 'attendance:viewAttendance' classSection %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a>
+
+<!-- <a href="{% url 'attendance:viewAttendance' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a> -->
 
 </div>
 <hr>
 
-<form action="{% url 'attendance:markAttendance' 'cNurseryA' %}" method="post">
+<form action="{% url 'attendance:enterAttendance' classSection %}" method="post">
 {% csrf_token %} 
 <div class="form-group">
   <label for="date">What date is this attendance for? </label>

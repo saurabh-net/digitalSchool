@@ -16,6 +16,14 @@
           </div>
 
           <h3> Add notice for {{neatSection}}</h3>
+          <div class="form-group">
+            <label for="subject">What category is this notice in?</label>
+            <select class="form-control" id="category" name="category">
+              <option selected>General</option>
+              <option>Homework</option>
+              <option>Examination</option>
+            </select>
+          </div>
           <div id="policy1"> </div>
           <button id="save1" class="btn btn-primary btn-block" onclick="save1()" type="button" >Save Notice</button>
           <hr>
@@ -126,15 +134,16 @@ function msieversion() {
       $('#policy1').destroy();
     var GameScore = Parse.Object.extend("Notice");
     var gameScore = new GameScore();
+    var selectedCategory = document.getElementById('category').value
 
-    gameScore.set("Category", "General");
+    gameScore.set("Category", selectedCategory);
     gameScore.set("Classes", ['{{strippedSection}}']);
     gameScore.set("message", policyText1);
 
     gameScore.save(null, {
       success: function(gameScore) {
         // Execute any logic that should take place after the object is saved.
-        alert('New object created with objectId: ' + gameScore.id);
+        alert('Your notice had been sent. Reload page to send another notice');
       },
       error: function(gameScore, error) {
         // Execute any logic that should take place if the save fails.

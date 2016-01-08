@@ -7,12 +7,12 @@
 <div>
 	<br>
 
-<a href="{% url 'marks:viewMarks' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Marks for this class</a>
+<a href="{% url 'marks:viewMarks' classSection %}" class="btn btn-primary btn-block" role="button">View Marks for this class</a>
 
 </div>
 <hr>
 
-<form action="{% url 'marks:enterMarks' 'cNurseryA' %}" method="POST" >
+<form action="{% url 'marks:enterMarks' classSection %}" method="POST" >
 {% csrf_token %} 
 
 <div class="form-group">

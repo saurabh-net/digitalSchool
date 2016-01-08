@@ -47,12 +47,12 @@ def enterMarks(request,classSection):
 		data['Category'] = submittedData['category']
 		data['MaxMarks'] = int(submittedData['total'])
 		data['Subject'] = submittedData['subject']
-		data['UMI'] = submittedData['date'] + 'cNurseryA' + submittedData['subject'] + submittedData['category']
+		data['UMI'] = submittedData['date'] + classSection + submittedData['subject'] + submittedData['category']
 		json_data = json.dumps(data)
 
 		connection = httplib.HTTPSConnection('api.parse.com', 443)
 		connection.connect()
-		connection.request('POST', '/1/classes/MarkscNurseryA', json_data, {
+		connection.request('POST', '/1/classes/Marks' + classSection, json_data, {
 		       "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
 		       "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
 		       "Content-Type": "application/json"

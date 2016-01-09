@@ -20,11 +20,10 @@ from django.contrib.auth.views import login, logout
 
 
 urlpatterns = [
-	url(r'^$','djangoSchool.views.home'),
+	url(r'^$','djangoSchool.views.home',name="home"),
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^attendance/',include('attendance.urls', namespace="attendance")),
 	url(r'^notice/',include('notice.urls', namespace="notice")),
 	url(r'^marks/',include('marks.urls', namespace="marks")),
-	url(r'^login/',include('authenticate.urls')),
 	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
 ]

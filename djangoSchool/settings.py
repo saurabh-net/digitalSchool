@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'attendance',
     'notice',
     'marks',
-    'authenticate',
     'accounts'
 )
 

@@ -4,19 +4,24 @@ import json,httplib,urllib
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
+@login_required
 def index(request):
 	context = {'item1':"My first string"}
 	return render(request,'attendance/list.html',context)	
 
+@login_required
 def viewAttendance(request,classSection):
 	neatSection = classSection[1:-1] + " " + classSection[-1]
 	strippedSection = classSection[1:]
 	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection}
 	return render(request,'attendance/viewAttendance.html',context)
 
+@login_required
 def enterAttendance(request,classSection):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	params = urllib.urlencode({"where":json.dumps({

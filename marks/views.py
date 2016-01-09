@@ -6,19 +6,23 @@ from django.http import HttpResponse
 import json,httplib,urllib
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def index(request):
 	context = {'item1':"My first string"}
 	return render(request,'marks/list.html',context)	
 
+@login_required
 def viewMarks(request,classSection):
 	neatSection = classSection[1:-1] + " " + classSection[-1]
 	strippedSection = classSection[1:]
 	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection}
 	return render(request,'marks/viewMarks.html',context)
-
+	
+@login_required
 def enterMarks(request,classSection):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	params = urllib.urlencode({"where":json.dumps({

@@ -16,11 +16,15 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
+from django.contrib.auth.views import login, logout
+
 
 urlpatterns = [
-	url(r'^$',views.index,name='index'),
+	url(r'^$','djangoSchool.views.home'),
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^attendance/',include('attendance.urls', namespace="attendance")),
 	url(r'^notice/',include('notice.urls', namespace="notice")),
 	url(r'^marks/',include('marks.urls', namespace="marks")),
+	url(r'^login/',include('authenticate.urls')),
+	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
 ]

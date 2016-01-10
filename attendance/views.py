@@ -120,7 +120,7 @@ def uploadAttendance(request,classSection):
 	else:
 		form = UploadFileForm()
 	return render_to_response(
-		'attendance/upload_form.html',
+		'attendance/uploadAttendance.html',
 		{
 			'form': form,
 			'title': 'Excel file upload and download example',

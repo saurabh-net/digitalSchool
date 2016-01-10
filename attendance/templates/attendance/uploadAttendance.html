@@ -1,8 +1,7 @@
-<html>
-<head>
-    <title>{{title}}</title>
-</head>
-<body>
+{% extends 'attendance/base.html' %}
+{% block title %}Upload attendance for {{neatSection}} {% endblock %}
+{% block content %}
+
     <h1>{{header}}</h1>
 
     {% if form.errors %}
@@ -18,5 +17,7 @@
         {% csrf_token %}
         <input type="submit" value="Submit">
     </form>
-</body>
-</html>
+    {% endblock %}
+{% block script %}
+{% endblock %}
+

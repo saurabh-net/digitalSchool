@@ -16,4 +16,4 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
 	context = {'item1':"My first string"}
-	return render(request,'welcome.html',context)	
+	return render(request,'attendance/list.html',context)	

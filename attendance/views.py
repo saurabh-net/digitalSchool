@@ -1,10 +1,18 @@
 from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.http import HttpResponse
 import json,httplib,urllib
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest, JsonResponse
+from django import forms
+from django.template import RequestContext
+import django_excel as excel
+import pyexcel.ext.xls
+import pyexcel.ext.xlsx
+import pyexcel
 
 
 # Create your views here.
@@ -89,3 +97,25 @@ def enterAttendance(request,classSection):
 		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList}
 		return render(request,'attendance/enterAttendance.html',context)
 
+class UploadFileForm(forms.Form):
+	file = forms.FileField()
+
+@login_required
+def uploadAttendance(request,classSection):
+	if request.method == "POST":
+		form = UploadFileForm(request.POST, request.FILES)
+		if form.is_valid():
+			filehandle = request.FILES['file']
+			attendanceExcel = request.FILES['file'].get_array()
+			for i in range(1,len(attendanceExcel)):
+				print attendanceExcel[i]
+	else:
+		form = UploadFileForm()
+	return render_to_response(
+		'attendance/upload_form.html',
+		{
+			'form': form,
+			'title': 'Excel file upload and download example',
+			'header': 'Please choose any excel file from your cloned repository:'
+		},
+		context_instance=RequestContext(request))

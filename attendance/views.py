@@ -13,6 +13,8 @@ import django_excel as excel
 import pyexcel.ext.xls
 import pyexcel.ext.xlsx
 import pyexcel
+import urllib
+
 
 
 # Create your views here.
@@ -87,7 +89,15 @@ def enterAttendance(request,classSection):
 					email.send()
 				else:
 					print 'ask them to enter their e-mail!'
-
+				if 'phoneNumber' in userdata:
+					print 'Starting now'
+					myMessage = 'Your child was absent today'
+					myNumber = userdata['phoneNumber']
+					print 'Is this where I go wrong?'
+					params = urllib.urlencode({'user': 'demoacc', 'password': 'demoacc', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PRODEM','version':3})
+					print 'Or here?'
+					f = urllib.urlopen("http://trans.profuseservices.com/sendsms.jsp?%s" % params)
+					print f.read()
 			else:
 				data[studentMod] = "P"
 		data['cDate'] = request.POST['date']

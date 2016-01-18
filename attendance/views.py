@@ -82,13 +82,13 @@ def enterAttendance(request,classSection):
 			if(student in absentStudents):
 				data[studentMod] = "A"
 				userdata = (user for user in userNames if user["username"] == classSection+student).next()
-				if 'email' in userdata:
-					print 'email the person!'
-					email = EmailMessage('Hello there', 'well well, your son was absent today', to=[userdata['email']])
-					print userdata['email']
-					email.send()
-				else:
-					print 'ask them to enter their e-mail!'
+				# if 'email' in userdata:
+				# 	print 'email the person!'
+				# 	email = EmailMessage('Hello there', 'well well, your son was absent today', to=[userdata['email']])
+				# 	print userdata['email']
+				# 	email.send()
+				# else:
+				# 	print 'ask them to enter their e-mail!'
 				if 'phoneNumber' in userdata:
 					print 'Starting now'
 					myMessage = 'Your child was absent today'

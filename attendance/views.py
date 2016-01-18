@@ -15,6 +15,7 @@ import pyexcel.ext.xls
 import pyexcel.ext.xlsx
 import pyexcel
 import urllib
+from attendance.models import ListOfClasses
 
 
 
@@ -58,13 +59,15 @@ def postAttendanceData(classSection,json_data):
 
 @login_required
 def index(request):
-	context = {'item1':"My first string"}
+	latest_class_list = ListOfClasses.objects.filter(schoolUser=request.user);
+	queryResult = [p.someClass for p in latest_class_list]
+	context = {'item1':"My first string", 'queryResult':queryResult}
 	return render(request,'attendance/list.html',context)	
 
 @login_required
 def viewAttendance(request,classSection):
 	neatSection = classSection[1:-1] + " " + classSection[-1]
-	strippedSection = classSection[1:]
+	strippedSection = classSection[1:]	
 	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection}
 	return render(request,'attendance/viewAttendance.html',context)
 

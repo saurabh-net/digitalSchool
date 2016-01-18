@@ -3,18 +3,6 @@
 {% block title %}Notices for {{neatSection}}{% endblock %}
 
 {% block content %}
-          <h1 class="page-header">{{neatSection}}</h1>
-          <div>
-        <br>
-        <button type="button" class="download btn btn-primary btn-block">Download Excel Sheet</button>
-        </div>
-        <hr>
-          <div class="table-responsive">
-            <table class="table table-striped" id ="myTable">
-
-              </table>
-          </div>
-
           <h3> Add notice for {{neatSection}}</h3>
           <div class="form-group">
             <label for="subject">What category is this notice in?</label>
@@ -25,8 +13,21 @@
             </select>
           </div>
           <div id="policy1"> </div>
-          <button id="save1" class="btn btn-primary btn-block" onclick="save1()" type="button" >Save Notice</button>
+          <button id="save1" class="btn btn-primary btn-block" onclick="save1()" type="button" >Send Notice</button>
           <hr>
+        
+        <hr>
+          <div class="table-responsive">
+            <table class="table table-striped" id ="myTable">
+
+              </table>
+          </div>
+           <div>
+        <br>
+        <button type="button" class="download btn btn-primary btn-block">Download Excel Sheet of past notices</button>
+        </div>
+        <hr>
+
 {% endblock %}
 
 {% block script %}
@@ -131,6 +132,10 @@ function msieversion() {
 
     var save1 = function() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
+      if(policyText1.length > 318){
+        swal("Message too long", "Notices must be less than 320 charecters", "error");
+        return;
+      }
       $('#policy1').destroy();
     var GameScore = Parse.Object.extend("Notice");
     var gameScore = new GameScore();
@@ -143,12 +148,14 @@ function msieversion() {
     gameScore.save(null, {
       success: function(gameScore) {
         // Execute any logic that should take place after the object is saved.
-        alert('Your notice had been sent. Reload page to send another notice');
+        // alert('Your notice had been sent. Reload page to send another notice');
+        swal("Notice sent!", "Reload page to send another notice", "success")
       },
       error: function(gameScore, error) {
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and message.
-        alert('Failed to create new object, with error code: ' + error.message);
+        swal("Failed to send notice", "There seems to be an error. Try again or contact support", "error")
+        //alert('Failed to create new object, with error code: ' + error.message);
       }
           });
   }       

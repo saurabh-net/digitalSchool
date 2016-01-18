@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 import json,httplib,urllib
@@ -107,12 +108,15 @@ def enterAttendance(request,classSection):
 		data['mdate'] = int(dateOfAttendance[start+1:end])
 		json_data = json.dumps(data)
 		postAttendanceData(classSection,json_data)					
-		return HttpResponseRedirect(reverse('attendance:index'))
+		# return HttpResponseRedirect(reverse('attendance:index'))
+		#return redirect(reverse('attendance:index'), {'alert':'alert'})
+		return render(request,'attendance/list.html',{'alert':'alert',"classSection":classSection})
 	else:	
 		neatSection = classSection[1:-1] + " " + classSection[-1]
 		strippedSection = classSection[1:]
 
 		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList}
+		# return redirect(reverse('attendance:index'), {"alert":"alert"})
 		return render(request,'attendance/enterAttendance.html',context)
 
 class UploadFileForm(forms.Form):

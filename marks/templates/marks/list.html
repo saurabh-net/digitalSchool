@@ -5,13 +5,22 @@
 {% block content %}
 <h1 class="page-header">Please pick a class from the list</h1>
 <div class="list-group" id="myList">
-  <a href="{% url 'marks:enterMarks' 'cNurseryA' %}" class="list-group-item">Nursery 'A'</a>
-  <a href="{% url 'marks:enterMarks' 'c1A' %}" class="list-group-item">Class 1 'A'</a>
-  <a href="{% url 'marks:enterMarks' 'c1B' %}" class="list-group-item">Class 1 'B'</a>
-  <a href="{% url 'marks:enterMarks' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
-  <a href="{% url 'marks:enterMarks' 'c1D' %}" class="list-group-item">Class 1 'D'</a>
+ {% for classLink,className in zipped_data %}
+  <a href="{% url 'marks:enterMarks' classLink %}" class="list-group-item">{{className}}</a>
+ <!--  <a href="{% url 'marks:enterMarks' 'c1A' %}" class="list-group-item">Class 1 'A'</a> -->
+  {% endfor %}
 </div>
 {% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+ $(document).ready(function(){
+   {% if alert %}
+      //alert('The attendance data for {{classSection}} has been entered. Thank you!');
+      swal("Marks submitted!", "Data for {{classSection}} has been entered. Thank you!", "success")
+   {% endif %}
+ });
+</script>
+{% endblock %}
 
 

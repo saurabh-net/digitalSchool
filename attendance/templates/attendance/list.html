@@ -5,10 +5,10 @@
 {% block content %}
 <h1 class="page-header">Please pick a class from the list</h1>
 <div class="list-group" id="myList">
-{% for o in queryResult %}
+{% for classLink,className in zipped_data %}
 <!--   <a href="{% url 'attendance:enterAttendance' 'cNurseryA' %}" class="list-group-item">Nursery 'A'</a>
   <a href="{% url 'attendance:enterAttendance' 'c1A' %}" class="list-group-item">Class 1 'A'</a> -->
-  <a href="{% url 'attendance:enterAttendance' o %}" class="list-group-item">{{o}}</a>
+  <a href="{% url 'attendance:enterAttendance' classLink %}" class="list-group-item">{{className}}</a>
 <!--   <a href="{% url 'attendance:enterAttendance' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
   <a href="{% url 'attendance:enterAttendance' 'c1D' %}" class="list-group-item">Class 1 'D'</a> -->
   {% endfor %}

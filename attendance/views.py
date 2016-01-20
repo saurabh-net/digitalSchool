@@ -18,64 +18,84 @@ import urllib
 from attendance.models import ListOfClasses
 
 
-
 # Create your views here.
 
-def getStudentList(classSection):
+def getStudentList(classSection,restKey,appKey):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	params = urllib.urlencode({"where":json.dumps({
 		   "Class_Name": '%s' % classSection
 		 })})
 	connection.connect()
 	connection.request('GET', '/1/classes/Class?%s' % params, '', {
-		   "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
-		   "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx"
+		   # "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		   # "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
+		   "X-Parse-Application-Id": appKey,
+		   "X-Parse-REST-API-Key": restKey
 		 })
 	result = json.loads(connection.getresponse().read())
+	print result
 	return result['results'][0]['Student_Name']
 
-def getUsernames(classSection):
+def getUsernames(classSection,restKey,appKey):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	params = urllib.urlencode({"where":json.dumps({"Class_Name": classSection,}),"limit":999})
 	connection.connect()
 	connection.request('GET', '/1/classes/_User?%s' % params, '', {
-			"X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
-		   "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx"
+			# "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		    #   "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx"
+		    "X-Parse-Application-Id": appKey,
+		    "X-Parse-REST-API-Key": restKey
 			})
 	userNames = json.loads(connection.getresponse().read())
 	return userNames['results']
 
-def postAttendanceData(classSection,json_data):
+def postAttendanceData(classSection,json_data,restKey,appKey):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	connection.connect()
 	connection.request('POST', '/1/classes/' + classSection , json_data, {
-		   "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
-		   "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
+		   # "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		   # "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
+		   "X-Parse-Application-Id": appKey,
+		   "X-Parse-REST-API-Key": restKey,
 		   "Content-Type": "application/json"
 		 })
 	results = json.loads(connection.getresponse().read())
-	print results
+	#print results
 
 
 @login_required
 def index(request):
-	latest_class_list = ListOfClasses.objects.filter(schoolUser=request.user);
-	queryResult = [p.someClass for p in latest_class_list]
-	context = {'item1':"My first string", 'queryResult':queryResult}
+	latest_class_list = ListOfClasses.objects.filter(schoolUser=request.user)	
+	classLinks = [p.someClass for p in latest_class_list]
+	classNames = [p[1:-1] + " " + p[-1] for p in classLinks]
+	zipped_data = zip(classLinks, classNames)
+	context = {'item1':"My first string",'classLinks':classLinks,'classNames':classNames,'zipped_data':zipped_data}
 	return render(request,'attendance/list.html',context)	
 
 @login_required
 def viewAttendance(request,classSection):
+	firstInstance = ListOfClasses.objects.filter(schoolUser=request.user).first()
+	restKey = firstInstance.restKey
+	javaKey = firstInstance.javaKey
+	appKey 	= firstInstance.appKey
 	neatSection = classSection[1:-1] + " " + classSection[-1]
 	strippedSection = classSection[1:]	
-	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection}
+	context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'appKey':appKey,'javaKey':javaKey}
 	return render(request,'attendance/viewAttendance.html',context)
 
 @login_required
 def enterAttendance(request,classSection):
-	studentList = getStudentList(classSection)
+	latest_class_list = ListOfClasses.objects.filter(schoolUser=request.user)	
+	classLinks = [p.someClass for p in latest_class_list]
+	classNames = [p[1:-1] + " " + p[-1] for p in classLinks]
+	zipped_data = zip(classLinks, classNames)
+	firstInstance = ListOfClasses.objects.filter(schoolUser=request.user).first()
+	restKey = firstInstance.restKey
+	javaKey = firstInstance.javaKey
+	appKey 	= firstInstance.appKey
+	studentList = getStudentList(classSection,restKey,appKey)
 	if request.method == 'POST':
-		userNames = getUsernames(classSection)
+		userNames = getUsernames(classSection,restKey,appKey)
 		absentStudents = request.POST
 		data = {}
 		# For loop to iterate over list of students and assign 'A' or 'P'.
@@ -110,15 +130,15 @@ def enterAttendance(request,classSection):
 		end = dateOfAttendance.rfind('/')
 		data['mdate'] = int(dateOfAttendance[start+1:end])
 		json_data = json.dumps(data)
-		postAttendanceData(classSection,json_data)					
+		postAttendanceData(classSection,json_data,restKey,appKey)					
 		# return HttpResponseRedirect(reverse('attendance:index'))
 		#return redirect(reverse('attendance:index'), {'alert':'alert'})
-		return render(request,'attendance/list.html',{'alert':'alert',"classSection":classSection})
+		return render(request,'attendance/list.html',{'alert':'alert',"classSection":classSection,'classLinks':classLinks,'classNames':classNames,'zipped_data':zipped_data})
 	else:	
 		neatSection = classSection[1:-1] + " " + classSection[-1]
 		strippedSection = classSection[1:]
 
-		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList}
+		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList,'appKey':appKey,'javaKey':javaKey}
 		# return redirect(reverse('attendance:index'), {"alert":"alert"})
 		return render(request,'attendance/enterAttendance.html',context)
 

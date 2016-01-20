@@ -33,7 +33,8 @@
 {% block script %}
     <script>
     	var data = '';
-    	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+    	// Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+      Parse.initialize("{{appKey}}","{{javaKey}}");
     	var GameScore = Parse.Object.extend("Notice");
 		var query = new Parse.Query(GameScore);
 		query.equalTo("Classes", "{{strippedSection}}");
@@ -132,6 +133,7 @@ function msieversion() {
 
     var save1 = function() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
+      policyText1 = $(policyText1).text()
       if(policyText1.length > 318){
         swal("Message too long", "Notices must be less than 320 charecters", "error");
         return;

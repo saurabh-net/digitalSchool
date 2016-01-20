@@ -17,7 +17,8 @@
 {% block script %}
 <script>
 	var data = '';
-	Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+	// Parse.initialize("Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC", "EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ");
+	Parse.initialize("{{appKey}}","{{javaKey}}");
 	var tableToLoad = "Marks" + "{{classSection}}"
 	var GameScore = Parse.Object.extend(tableToLoad);
 	var query = new Parse.Query(GameScore);

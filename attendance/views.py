@@ -145,7 +145,6 @@ def enterAttendance(request,classSection):
 	else:	
 		neatSection = classSection[1:-1] + " " + classSection[-1]
 		strippedSection = classSection[1:]
-
 		context = {'classSection':classSection,'neatSection':neatSection,'strippedSection':strippedSection,'studentList':studentList,'appKey':appKey,'javaKey':javaKey}
 		# return redirect(reverse('attendance:index'), {"alert":"alert"})
 		return render(request,'attendance/enterAttendance.html',context)

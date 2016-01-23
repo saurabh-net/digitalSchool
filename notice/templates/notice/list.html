@@ -12,5 +12,15 @@
 </div>
 {% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+ $(document).ready(function(){
+   {% if alert %}
+      //alert('The attendance data for {{classSection}} has been entered. Thank you!');
+      swal("Notice submitted!", "The notice has been sent to students of {{neatSection}}. Thank you!", "success")
+   {% endif %}
+ });
+</script>
+{% endblock %}
 
 

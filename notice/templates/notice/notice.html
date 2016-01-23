@@ -28,6 +28,16 @@
         </div>
         <hr>
 
+  <form action="{% url 'notice:class' classSection %}" method="post" id="myHiddenForm">
+  {% csrf_token %} 
+  <div class="form-group">
+    <input type="hidden" class="form-control" id="message" name="message" value="">
+    <input type="hidden" class="form-control" id="selectedcategory" name="selectedcategory" value="">
+    <input type="hidden" class="form-control" id="classes" name="classes" value="">
+  </div>
+
+  </form>
+
 {% endblock %}
 
 {% block script %}
@@ -131,19 +141,9 @@ function msieversion() {
       $('#policy1').summernote({focus: true, height: 200});
        });
 
-//     function getTexts(selector) {
-//       var textContents = $(selector).map(function(i, item) {
-//     return $(item).text();
-//     });
-//   return textContents.join("\n\n");
-// }
-
     var save1 = function() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
-      // $("#theTextarea").val(getTexts("#someContainer > p"));
-
-      // policyText1 = $(policyText1).text()
-
+      // console.log(policyText1);
       var html = $('<div>' + policyText1 + '</div>');
       var plain = '';
 
@@ -151,34 +151,51 @@ function msieversion() {
         plain += '\n' + $(this).text();
       });
 
-      policyText1 = plain;
+      policyText1 = String(plain);
 
-      if(policyText1.length > 318){
+      if(policyText1.length > 300){
         swal("Message too long", "Notices must be less than 320 charecters", "error");
         return;
       }
+      
+
+      form = document.getElementById("myHiddenForm");
+      // document.getElementById("message").value = policyText1;
+      document.getElementById("message").value = policyText1;
+      document.getElementById("selectedcategory").value = document.getElementById('category').value;
+      document.getElementById("classes").value = "{{strippedSection}}";
+      // Define what should happen when the response is loaded
       $('#policy1').destroy();
-    var GameScore = Parse.Object.extend("Notice");
-    var gameScore = new GameScore();
-    var selectedCategory = document.getElementById('category').value
+      // form.action = "{% url 'notice:class' classSection %}";
 
-    gameScore.set("Category", selectedCategory);
-    gameScore.set("Classes", ['{{strippedSection}}']);
-    gameScore.set("message", policyText1);
+      // To be sent, the form needs to be attached to the main document.
 
-    gameScore.save(null, {
-      success: function(gameScore) {
-        // Execute any logic that should take place after the object is saved.
-        // alert('Your notice had been sent. Reload page to send another notice');
-        swal("Notice sent!", "Reload page to send another notice", "success")
-      },
-      error: function(gameScore, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
-        swal("Failed to send notice", "There seems to be an error. Try again or contact support", "error")
-        //alert('Failed to create new object, with error code: ' + error.message);
-      }
-          });
+      form.submit();
+    
+
+    // var GameScore = Parse.Object.extend("Notice");
+    // var gameScore = new GameScore();
+    // var selectedCategory = document.getElementById('category').value
+
+    // gameScore.set("Category", selectedCategory);
+    // gameScore.set("Classes", ['{{strippedSection}}']);
+    // gameScore.set("message", policyText1);
+
+    // gameScore.save(null, {
+    //   success: function(gameScore) {
+    //     // Execute any logic that should take place after the object is saved.
+    //     // alert('Your notice had been sent. Reload page to send another notice');
+    //     swal("Notice sent!", "Reload page to send another notice", "success")
+    //   },
+    //   error: function(gameScore, error) {
+    //     // Execute any logic that should take place if the save fails.
+    //     // error is a Parse.Error with an error code and message.
+    //     swal("Failed to send notice", "There seems to be an error. Try again or contact support", "error")
+    //     //alert('Failed to create new object, with error code: ' + error.message);
+    //   }
+    //       });
+
+
   }       
 
     </script>

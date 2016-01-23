@@ -138,8 +138,6 @@ function msieversion() {
 //   return textContents.join("\n\n");
 // }
 
-$("#theTextarea").val(getTexts("#someContainer > p"));
-
     var save1 = function() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
       // $("#theTextarea").val(getTexts("#someContainer > p"));
@@ -152,7 +150,7 @@ $("#theTextarea").val(getTexts("#someContainer > p"));
       $(html.find('p')).each(function() {
         plain += '\n' + $(this).text();
       });
-      
+
       policyText1 = plain;
 
       if(policyText1.length > 318){

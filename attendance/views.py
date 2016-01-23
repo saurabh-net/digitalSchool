@@ -16,6 +16,7 @@ import pyexcel.ext.xlsx
 import pyexcel
 import urllib
 from attendance.models import ListOfClasses
+from datetime import datetime
 
 
 # Create your views here.
@@ -98,6 +99,10 @@ def enterAttendance(request,classSection):
 		userNames = getUsernames(classSection,restKey,appKey)
 		absentStudents = request.POST
 		data = {}
+		data['cDate'] = request.POST['date']
+		dateOfAttendance = data['cDate']
+		myDateObject = datetime.strptime(dateOfAttendance,'%d/%m/%Y')
+		myDateObject = myDateObject.strftime("%d %B %Y")
 		# For loop to iterate over list of students and assign 'A' or 'P'.
 		# Also sends emails to absent students' parents
 		for student in studentList:
@@ -114,18 +119,21 @@ def enterAttendance(request,classSection):
 				# else:
 				# 	print 'ask them to enter their e-mail!'
 				if 'phoneNumber' in userdata:
-					print 'Starting now'
-					myMessage = 'Your child was absent today'
+					# print 'Starting now'
+					try:
+						childName = userdata["username"].split()
+						childName = childName[1] +  " " + childName[2]
+					except:
+						childName = "Your child"
+					myMessage =  childName + ' was absent on ' + myDateObject
 					myNumber = userdata['phoneNumber']
-					print 'Is this where I go wrong?'
-					params = urllib.urlencode({'user': 'demoacc', 'password': 'demoacc', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PRODEM','version':3})
-					print 'Or here?'
+					# print 'Is this where I go wrong?'
+					params = urllib.urlencode({'user': 'Saurabh', 'password': '123@123', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PTMNOW','version':3})
+					# print 'Or here?'
 					f = urllib.urlopen("http://trans.profuseservices.com/sendsms.jsp?%s" % params)
 					print f.read()
 			else:
 				data[studentMod] = "P"
-		data['cDate'] = request.POST['date']
-		dateOfAttendance = data['cDate']
 		start = dateOfAttendance.find('/')
 		end = dateOfAttendance.rfind('/')
 		data['mdate'] = int(dateOfAttendance[start+1:end])

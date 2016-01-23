@@ -24,4 +24,5 @@ class ListOfClasses(models.Model):
 # from django.contrib.auth.models import User
 # from attendance.models import ListOfClasses
 # user = User.objects.get(username='saurabhmaurya06')
+# user = User.objects.get(username='admin')
 # q=ListOfClasses(schoolUser=user,someClass="cNurseryA",appKey="Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",restKey="Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx", javaKey="EhvA6Aqy067KaSoi6HdVb7Gn5OSMaxr0OwJYqkwJ")

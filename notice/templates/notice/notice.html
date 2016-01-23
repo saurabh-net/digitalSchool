@@ -131,9 +131,30 @@ function msieversion() {
       $('#policy1').summernote({focus: true, height: 200});
        });
 
+//     function getTexts(selector) {
+//       var textContents = $(selector).map(function(i, item) {
+//     return $(item).text();
+//     });
+//   return textContents.join("\n\n");
+// }
+
+$("#theTextarea").val(getTexts("#someContainer > p"));
+
     var save1 = function() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
-      policyText1 = $(policyText1).text()
+      // $("#theTextarea").val(getTexts("#someContainer > p"));
+
+      // policyText1 = $(policyText1).text()
+
+      var html = $('<div>' + policyText1 + '</div>');
+      var plain = '';
+
+      $(html.find('p')).each(function() {
+        plain += '\n' + $(this).text();
+      });
+      
+      policyText1 = plain;
+
       if(policyText1.length > 318){
         swal("Message too long", "Notices must be less than 320 charecters", "error");
         return;

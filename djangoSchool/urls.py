@@ -26,4 +26,5 @@ urlpatterns = [
 	url(r'^notice/',include('notice.urls', namespace="notice")),
 	url(r'^marks/',include('marks.urls', namespace="marks")),
 	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
+	url(r'^records/', include('records.urls',namespace="records")),
 ]

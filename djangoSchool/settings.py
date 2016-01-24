@@ -40,7 +40,8 @@ INSTALLED_APPS = (
 	'attendance',
 	'notice',
 	'marks',
-	'accounts'
+	'accounts',
+	'records'
 )
 
 MIDDLEWARE_CLASSES = (

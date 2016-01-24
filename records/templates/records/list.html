@@ -1,0 +1,75 @@
+{% extends 'records/base.html' %}
+{% block title %}Select class of which to edit student information {% endblock %}
+{% block highlighted_block %}
+            <ul class="nav nav-sidebar">
+              <li class="active"><a href="">Add/Edit Student Information<span class="sr-only">(current)</span></a></li>
+              <li><a href="">Change password</a></li>
+              <li><a href="">Help</a></li>
+            </ul>  
+{% endblock %}
+{% block content %}
+<h1 class="page-header">Please pick a class from the list</h1>
+<div class="list-group" id="myList">
+{% for classLink,className in zipped_data %}
+  <a href="{% url 'attendance:enterAttendance' classLink %}" class="list-group-item">{{className}}</a>
+<!--   <a href="{% url 'attendance:enterAttendance' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
+  <a href="{% url 'attendance:enterAttendance' 'c1D' %}" class="list-group-item">Class 1 'D'</a> -->
+  {% endfor %}
+</div>
+<h1 class="page-header">... Or add a new class to the list</h1>
+
+<form action="" method="post">
+{% csrf_token %} 
+<div class="form-group">
+      <label for="classNumber">Which class do you wish to add?</label>
+      <select class="form-control" id="classNumber" name="classNumber">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+      </select>
+</div>
+
+<div class="form-group">
+      <label for="classSection">Which section of that class do you wish to add?</label>
+      <select class="form-control" id="classSection" name="classSection">
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+        <option>D</option>
+        <option>E</option>
+        <option>F</option>
+        <option>G</option>
+        <option>H</option>
+        <option>I</option>
+        <option>J</option>
+        <option>K</option>
+      </select>
+</div>
+
+<input type="submit" value="Add this class" class="btn btn-primary btn-block" role="button">
+
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+ $(document).ready(function(){
+   {% if alert %}
+      //alert('The attendance data for {{classSection}} has been entered. Thank you!');
+      swal("Attendance submitted!", "Data for {{classSection}} has been entered. Thank you!", "success")
+   {% endif %}
+ });
+</script>
+{% endblock %}
+
+

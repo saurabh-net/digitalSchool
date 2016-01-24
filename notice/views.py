@@ -20,6 +20,35 @@ from datetime import datetime
 
 # Create your views here.
 
+def getStudentList(classSection,restKey,appKey):
+	connection = httplib.HTTPSConnection('api.parse.com', 443)
+	params = urllib.urlencode({"where":json.dumps({
+		   "Class_Name": '%s' % classSection
+		 })})
+	connection.connect()
+	connection.request('GET', '/1/classes/Class?%s' % params, '', {
+		   # "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		   # "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx",
+		   "X-Parse-Application-Id": appKey,
+		   "X-Parse-REST-API-Key": restKey
+		 })
+	result = json.loads(connection.getresponse().read())
+	print result
+	return result['results'][0]['Student_Name']
+
+def getUsernames(classSection,restKey,appKey):
+	connection = httplib.HTTPSConnection('api.parse.com', 443)
+	params = urllib.urlencode({"where":json.dumps({"Class_Name": classSection,}),"limit":999})
+	connection.connect()
+	connection.request('GET', '/1/classes/_User?%s' % params, '', {
+			# "X-Parse-Application-Id": "Sqj2XR5GDdMcXuMsffDQ9yEdzhYJqBZYvDSMLqFC",
+		    #   "X-Parse-REST-API-Key": "Ox5FKRyiEM33GzS7Ka6oTJCXRIjiPghotbD9dWPx"
+		    "X-Parse-Application-Id": appKey,
+		    "X-Parse-REST-API-Key": restKey
+			})
+	userNames = json.loads(connection.getresponse().read())
+	return userNames['results']
+
 def postNoticeData(classSection,json_data,restKey,appKey):
 	connection = httplib.HTTPSConnection('api.parse.com', 443)
 	connection.connect()
@@ -54,7 +83,16 @@ def classDetail(request,classSection):
 	print neatSection
 	strippedSection = classSection[1:]
 	if request.method == 'POST':
-		print "I am here!"
+		userNames = getUsernames(classSection,restKey,appKey)
+		studentList = getStudentList(classSection,restKey,appKey)
+		for student in studentList:
+			userdata = (user for user in userNames if user["username"] == classSection+student).next()
+			if 'phoneNumber' in userdata:
+				myMessage = request.POST['message']
+				myNumber = userdata['phoneNumber']
+				params = urllib.urlencode({'user': 'Saurabh', 'password': '123@123', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PTMNOW','version':3})
+				f = urllib.urlopen("http://trans.profuseservices.com/sendsms.jsp?%s" % params)
+				print f.read()
 		data = {}
 		data['Category']=request.POST['selectedcategory']
 		listClasses = []

@@ -14,6 +14,7 @@ class ListOfClasses(models.Model):
 	appKey = models.CharField(max_length=100)
 	restKey = models.CharField(max_length=100)
 	javaKey = models.CharField(max_length=100)
+	masterKey = models.CharField(max_length=100)
 
 	def __unicode__(self):              # __unicode__ on Python 2
 		return u'%s, %s, %s' % (self.schoolUser, self.someClass, self.appKey)

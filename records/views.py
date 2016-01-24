@@ -21,15 +21,128 @@ import urllib
 from attendance.models import ListOfClasses
 from datetime import datetime
 
+def postClassTable(json_data,restKey,appKey):
+	connection = httplib.HTTPSConnection('api.parse.com', 443)
+	connection.connect()
+	connection.request('POST', '/1/classes/Class', json_data, {
+		   "X-Parse-Application-Id": appKey,
+		   "X-Parse-REST-API-Key": restKey,
+		   "Content-Type": "application/json"
+		 })
+	results = json.loads(connection.getresponse().read())
+	#print results
 
+def postListClassTable(classNumber,classSection,restKey,appKey,masterKey):
+	# Change Schema
+	print masterKey
+	fullname = 'c' + classNumber + classSection
+	partname = classNumber + classSection 
+	data = {}
+	data['className'] = "List_Class"
+	data['fields'] = {}
+	data['fields'][fullname] = {}
+	data['fields'][fullname]['type'] = "Array"
+	json_data = json.dumps(data)
+	print json_data 
+	connection = httplib.HTTPSConnection('api.parse.com', 443)
+	connection.connect()
+	connection.request('PUT', '/1/schemas/List_Class', json_data, {
+	       "X-Parse-Application-Id": appKey,
+	       "X-Parse-Master-Key": masterKey,
+	       "Content-Type": "application/json"
+	     })
+	print "Changing the schema"
+	result = json.loads(connection.getresponse().read())
+	print result
+
+	# Update
+	data = {}
+	data["Class_List"] = {}
+	data["Class_List"]["__op"] = "AddUnique"
+	data["Class_List"]["objects"] = [partname]
+	data[fullname] = {}
+	data[fullname]["__op"] = "AddUnique"
+	data[fullname]["objects"] = ["English", "Hindi"]
+	json_data = json.dumps(data)
+	connection = httplib.HTTPSConnection('api.parse.com', 443)
+	connection.connect() 
+	connection.request('PUT', '/1/classes/List_Class/1hKtVUxgOI', json_data, {
+	   "X-Parse-Application-Id": appKey,
+	   "X-Parse-REST-API-Key": restKey,
+	   "Content-Type": "application/json"
+	 })
+	result = json.loads(connection.getresponse().read())
+	print result
+
+
+
+
+
+	# connection.connect()
+	# connection.request('GET', '/1/classes/List_Class', '', {
+	# 	   "X-Parse-Application-Id": appKey,
+	# 	   "X-Parse-REST-API-Key": restKey,
+	# 	   "Content-Type": "application/json"
+	# 	 })
+	# results = json.loads(connection.getresponse().read())
+	# results = results['results'][0]
+	# results['c' + classNumber + classSection] = ['Hindi','English']
+	# results['Class_List'].append(classNumber+classSection)
+	# del results['createdAt']
+	# del results['updatedAt']
+	# objectID = results["objectId"]
+	# del results['objectId']
+	# json_data = json.dumps(results)
+	# # Delete old record
+	# connection = httplib.HTTPSConnection('api.parse.com', 443)
+	# connection.connect()
+	# connection.request('DELETE', '/1/classes/List_Class/'+objectID, json_data, {
+	# 	   "X-Parse-Application-Id": appKey,
+	# 	   "X-Parse-REST-API-Key": restKey,
+	# 	   "Content-Type": "application/json"
+	# 	 })
+	# results = json.loads(connection.getresponse().read())
+	# print "Delete:"
+	# print results
+
+
+	# # Add new data
+	# connection = httplib.HTTPSConnection('api.parse.com', 443)
+	# connection.connect()
+	# connection.request('POST', '/1/classes/List_Class', json_data, {
+	# 	   "X-Parse-Application-Id": appKey,
+	# 	   "X-Parse-REST-API-Key": restKey,
+	# 	   "Content-Type": "application/json"
+	# 	 })
+	# results = json.loads(connection.getresponse().read())
+	# print "Insert:"
+	# print results
+	
 @login_required
 def index(request):
 	latest_class_list = ListOfClasses.objects.filter(schoolUser=request.user)	
 	classLinks = [p.someClass for p in latest_class_list]
 	classNames = [p[1:-1] + " " + p[-1] for p in classLinks]
 	zipped_data = zip(classLinks, classNames)
+	firstInstance = ListOfClasses.objects.filter(schoolUser=request.user).first()
+	restKey = firstInstance.restKey
+	javaKey = firstInstance.javaKey
+	appKey 	= firstInstance.appKey
+	masterKey = firstInstance.masterKey
 	context = {'item1':"My first string",'classLinks':classLinks,'classNames':classNames,'zipped_data':zipped_data}
-	return render(request,'records/list.html',context)	
+	if request.method == 'POST':
+		classNumber = request.POST['classNumber']
+		classSection = request.POST['classSection']
+		data = {}
+		data['Class_Name'] = 'c' + request.POST['classNumber'] + request.POST['classSection']
+		data['Student_Name'] = []
+		json_data = json.dumps(data)
+		postClassTable(json_data,restKey,appKey)		
+		postListClassTable(classNumber,classSection,restKey,appKey,masterKey)
+		context['alert'] = 'alert'
+		return render(request,'records/list.html',context)
+	else:
+		return render(request,'records/list.html',context)	
 
 @login_required
 def enterStudents(request,classSection):

@@ -11,14 +11,12 @@
 <h1 class="page-header">Please pick a class from the list</h1>
 <div class="list-group" id="myList">
 {% for classLink,className in zipped_data %}
-  <a href="{% url 'attendance:enterAttendance' classLink %}" class="list-group-item">{{className}}</a>
-<!--   <a href="{% url 'attendance:enterAttendance' 'c1C' %}" class="list-group-item">Class 1 'C'</a>
-  <a href="{% url 'attendance:enterAttendance' 'c1D' %}" class="list-group-item">Class 1 'D'</a> -->
+  <a href="{% url 'records:enterStudents' classLink %}" class="list-group-item">{{className}}</a>
   {% endfor %}
 </div>
 <h1 class="page-header">... Or add a new class to the list</h1>
 
-<form action="" method="post">
+<form action="{% url 'records:index' %}" method="post">
 {% csrf_token %} 
 <div class="form-group">
       <label for="classNumber">Which class do you wish to add?</label>
@@ -66,7 +64,7 @@
  $(document).ready(function(){
    {% if alert %}
       //alert('The attendance data for {{classSection}} has been entered. Thank you!');
-      swal("Attendance submitted!", "Data for {{classSection}} has been entered. Thank you!", "success")
+      swal("Class added!", "You have successfully added a class to PTMNow", "success")
    {% endif %}
  });
 </script>

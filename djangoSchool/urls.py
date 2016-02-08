@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
 from django.contrib.auth.views import login, logout
+from rest_framework import routers
 
 
 urlpatterns = [
@@ -27,4 +28,5 @@ urlpatterns = [
 	url(r'^marks/',include('marks.urls', namespace="marks")),
 	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
 	url(r'^records/', include('records.urls',namespace="records")),
+	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -34,7 +34,7 @@ def getStudentList(classSection,restKey,appKey):
 		   "X-Parse-REST-API-Key": restKey
 		 })
 	result = json.loads(connection.getresponse().read())
-	print result
+	# print result
 	return result['results'][0]['Student_Name']
 
 def getUsernames(classSection,restKey,appKey):

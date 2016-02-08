@@ -145,14 +145,15 @@ function msieversion() {
       var policyText1 = $('#policy1').code(); //save HTML If you need(aHTML: array).
       // console.log(policyText1);
       var html = $('<div>' + policyText1 + '</div>');
+      var substring = "<p>";
       var plain = '';
-
       $(html.find('p')).each(function() {
         plain += '\n' + $(this).text();
       });
-
-      policyText1 = String(plain);
-
+      // console.log(plain);
+      if(policyText1.indexOf(substring) > -1){
+	  	policyText1 = String(plain);
+	  }
       if(policyText1.length > 300){
         swal("Message too long", "Notices must be less than 320 charecters", "error");
         return;
@@ -165,12 +166,13 @@ function msieversion() {
       document.getElementById("selectedcategory").value = document.getElementById('category').value;
       document.getElementById("classes").value = "{{strippedSection}}";
       // Define what should happen when the response is loaded
-      $('#policy1').destroy();
+      
       // form.action = "{% url 'notice:class' classSection %}";
 
       // To be sent, the form needs to be attached to the main document.
 
       form.submit();
+      $('#policy1').destroy();
     
 
     // var GameScore = Parse.Object.extend("Notice");

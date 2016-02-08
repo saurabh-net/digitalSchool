@@ -64,7 +64,8 @@
  $(document).ready(function(){
    {% if alert %}
       //alert('The attendance data for {{classSection}} has been entered. Thank you!');
-      swal("Class added!", "You have successfully added a class to PTMNow", "success")
+      swal("Class added!", "You have successfully added a class to PTMNow.", "success")
+      // window.location = "http://www.ptmnow.com/records";
    {% endif %}
  });
 </script>

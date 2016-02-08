@@ -17,6 +17,25 @@ import pyexcel
 import urllib
 from attendance.models import ListOfClasses
 from datetime import datetime
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from .serializers import UserSerializer, GroupSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 # Create your views here.
 
@@ -89,6 +108,7 @@ def classDetail(request,classSection):
 			userdata = (user for user in userNames if user["username"] == classSection+student).next()
 			if 'phoneNumber' in userdata:
 				myMessage = request.POST['message']
+				myMessage = myMessage.replace(u'\xa0', ' ').encode('utf-8')
 				myNumber = userdata['phoneNumber']
 				params = urllib.urlencode({'user': 'Saurabh', 'password': '123@123', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PTMNOW','version':3})
 				f = urllib.urlopen("http://trans.profuseservices.com/sendsms.jsp?%s" % params)

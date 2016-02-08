@@ -1,3 +1,68 @@
 {% extends 'attendance/base.html' %}
 {% block title %}Enter Attendance for {{neatSection}} {% endblock %}
 
+{% block content %}
+<h1 class="page-header">{{neatSection}}</h1>
+<hr>
+<form action="{% url 'records:enterStudents' classSection %}" method="post">
+<table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Roll number</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Mobile number</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for roll,first,last in zipped_student %}
+<tr>
+        <td><div class="form-group">
+  			<input type="text" name="{{roll}}Roll" value="{{roll}}">
+		</div></td>
+
+        <td><div class="form-group">
+  			<input type="text" name="{{roll}}First" value="{{first}}">
+		</div></td>
+
+		<td><div class="form-group">
+  			<input type="text" name="{{roll}}Last" value="{{last}}">
+		</div></td>
+
+<!-- 		<td><div class="form-group">
+  			<input type="text" name="{{roll}}Third" value="{{first}}">
+		</div></td> -->
+
+    </tr>
+{% endfor %}
+
+{% for i in my_range %}
+<tr>
+        <td><div class="form-group">
+  			<input type="text" name="{{i}}BlankRoll" value="{{i}}">
+		</div></td>
+
+        <td><div class="form-group">
+  			<input type="text" name="{{i}}BlankFirst" value="">
+		</div></td>
+
+		<td><div class="form-group">
+  			<input type="text" name="{{i}}BlankLast" value="">
+		</div></td>
+
+<!-- 		<td><div class="form-group">
+  			<input type="text" name="{{roll}}Third" value="{{first}}">
+		</div></td> -->
+
+    </tr>
+{% endfor %}
+
+
+
+</tbody>
+  </table>
+
+<input type="submit" value="Submit Attendance" class="btn btn-primary btn-block" role="button">
+
+</form>
+{% endblock %}

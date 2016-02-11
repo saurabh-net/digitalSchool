@@ -122,10 +122,10 @@ def enterAttendance(request,classSection):
 					# print 'Starting now'
 					try:
 						childName = userdata["username"].split()
-						childName = childName[1] +  " " + childName[2]
+						childName = " ".join(childName)
 					except:
 						childName = "Your child"
-					myMessage =  childName + ' was absent on ' + myDateObject
+					myMessage =  childName + ' was absent on ' + myDateObject + '\r\n - Kerala Public School'
 					myNumber = userdata['phoneNumber']
 					# print 'Is this where I go wrong?'
 					params = urllib.urlencode({'user': 'Saurabh', 'password': '123@123', 'mobiles': myNumber, 'sms':myMessage,'senderid':'PTMNOW','version':3})

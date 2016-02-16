@@ -41,6 +41,8 @@ INSTALLED_APPS = (
 	'notice',
 	'marks',
 	'accounts',
+	# 'mywrapper',
+	# 'rest_framework'
 )
 
 MIDDLEWARE_CLASSES = (

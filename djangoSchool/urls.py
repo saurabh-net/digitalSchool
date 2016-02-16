@@ -28,5 +28,6 @@ urlpatterns = [
 	url(r'^marks/',include('marks.urls', namespace="marks")),
 	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
 	url(r'^records/', include('records.urls',namespace="records")),
+	url(r'^myapi/', include('mywrapper.urls',namespace="mywrapper")),
 	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

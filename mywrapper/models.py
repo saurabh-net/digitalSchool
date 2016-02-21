@@ -31,6 +31,7 @@ class Notice(models.Model):
 	message = models.CharField(max_length=800)
 	timeNoticeWasMarked = models.DateTimeField(auto_now=False, auto_now_add=True)
 	classToSendNotice = models.ForeignKey(Grade) # It is the fully qualified class, e.g. 5A
+	owner = models.ForeignKey('auth.User')
 
 # TO DO: Marks | Service Layer
 

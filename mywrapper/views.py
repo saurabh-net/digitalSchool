@@ -7,7 +7,22 @@ from rest_framework import generics
 from mywrapper.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
+from mywrapper.permissions import IsOwnerOrReadOnly
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
+from rest_framework import renderers
+
+@api_view(('GET',))
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('mywrapper:user-list', request=request, format=format),
+        'notice': reverse('mywrapper:notice-list', request=request, format=format),
+        'grade': reverse('mywrapper:grade-list', request=request, format=format),
+        'student': reverse('mywrapper:student-list', request=request, format=format)
+    })
 
 class GradeList(generics.ListCreateAPIView):
     queryset = Grade.objects.all()
@@ -17,6 +32,17 @@ class GradeList(generics.ListCreateAPIView):
 class GradeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
+
+class StudentList(generics.ListCreateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class NoticeList(generics.ListCreateAPIView):
     queryset = Notice.objects.all()
@@ -28,7 +54,7 @@ class NoticeList(generics.ListCreateAPIView):
 
 class NoticeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Notice.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
     serializer_class = NoticeSerializer
 
 class UserList(generics.ListAPIView):

@@ -1,0 +1,56 @@
+{% extends 'attendance/base.html' %}
+{% block title %}Enter Attendance for {{neatSection}} {% endblock %}
+
+{% block content %}
+<h1 class="page-header">{{neatSection}}</h1>
+
+<div>
+	<br>
+
+<a href="{% url 'attendance:viewAttendance' classSection %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a>
+
+<!-- <a href="{% url 'attendance:viewAttendance' 'cNurseryA' %}" class="btn btn-primary btn-block" role="button">View Attendance for this class</a> -->
+
+</div>
+<hr>
+
+<form action="{% url 'attendance:enterAttendance' classSection %}" method="post">
+{% csrf_token %} 
+<div class="form-group">
+  <label for="date">What date is this attendance for? </label>
+  <input type="text" class="form-control" id="date" name="date">
+</div>
+<table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Student's Name</th>
+        <th>Present/Absent</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for o in studentList %}
+<tr>
+        <td><label>{{o}}</label></td>
+        <td><div class="form-group">
+  			<input type="checkbox" name="{{o}}" data-toggle="toggle" data-on="Absent" data-off="Present" data-onstyle="danger" data-offstyle="success">
+		</div></td>
+    </tr>
+{% endfor %}
+</tbody>
+  </table>
+
+<input type="submit" value="Submit Attendance" class="btn btn-primary btn-block" role="button">
+
+</form>
+<hr>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$( "#date" ).datepicker(
+	{dateFormat: "d/m/yy"});
+</script>
+
+{% endblock %}

@@ -42,7 +42,8 @@ INSTALLED_APPS = (
 	'marks',
 	'accounts',
 	'mywrapper',
-	'rest_framework'
+	'rest_framework',
+	'attendance2'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -137,6 +138,6 @@ FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
 						"django_excel.TemporaryExcelFileUploadHandler")
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    # 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10
 }

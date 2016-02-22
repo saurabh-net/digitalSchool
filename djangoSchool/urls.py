@@ -29,5 +29,6 @@ urlpatterns = [
 	url(r'^accounts/', include('accounts.urls',namespace="accounts")),
 	url(r'^records/', include('records.urls',namespace="records")),
 	url(r'^myapi/', include('mywrapper.urls',namespace="mywrapper")),
-	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+	url(r'^attendance2/',include('attendance2.urls', namespace="attendance2")),
 ]

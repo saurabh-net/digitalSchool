@@ -35,11 +35,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'username', 'notice')
 
+class PartialStudentSerializer(StudentSerializer):
+    class Meta:
+        model = Student
+        fields = ('studentID', 'studentName')
+
 class GradeSerializer(serializers.ModelSerializer):
     # notice = serializers.HyperlinkedRelatedField(many=True, view_name='mywrapper:notice-detail', read_only=True)
     # student = serializers.HyperlinkedRelatedField(many=True, view_name='mywrapper:student-detail', read_only=True)
-    notice = NoticeSerializer(many=True, read_only=True)
-    student = StudentSerializer(many=True, read_only=True)
+    # notice = NoticeSerializer(many=True, read_only=True)
+    student = PartialStudentSerializer(many=True, read_only=True )
     class Meta:
         model = Grade
-        fields = ('fullGradeID', 'standardID', 'sectionID','notice','student')
+        fields = ('fullGradeID', 'standardID', 'sectionID','student')
